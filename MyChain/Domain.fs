@@ -98,12 +98,13 @@ module Blockchain =
             ( proofOfWorkCondition lastProof )
         
     let mine nodeAddress blockchain =
-        blockchain
-        |> addMinedTransaction nodeAddress
+        let withMinedTrans = blockchain |> addMinedTransaction nodeAddress
+        
+        withMinedTrans
         |> LastBlock
         |> Block.GetProof
         |> proveWork
-        |> newBlock blockchain
+        |> newBlock withMinedTrans
          
     let rec private isValidChain = function
         | [] | [_] -> true
